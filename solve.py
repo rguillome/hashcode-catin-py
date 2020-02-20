@@ -1,18 +1,17 @@
 import numpy as np
 import sys
-from numba import jit
 
 file_in = sys.argv[1]
 ################### READ ######################
 ###############################################
 
-#A - example
+# A - example
 with open(file_in+'.txt', 'r') as f:
     lines = f.readlines()
     book_nb, lib_nb, max_time = np.array(
         [int(x) for x in lines[0].split()])
     scores = np.array([int(x) for x in lines[1].split()])
-    #print(book_nb, lib_nb, days, scores)
+    # print(book_nb, lib_nb, days, scores)
 
     lib_data = []
     for l in range(2, len(lines)-1, 2):
@@ -28,7 +27,7 @@ for k in range(int(lib_nb)):
     nb_books = lib_data[k][0][0]  # books in lib k
     signup = lib_data[k][0][1]
     bookpday = lib_data[k][0][2]
-    #print("books", lib_data[k][1])
+    # print("books", lib_data[k][1])
     total_score = np.sum(scores[lib_data[k][1]])
     print(nb_books, signup, bookpday)
     lib_score = total_score/nb_books*bookpday/signup
@@ -52,14 +51,18 @@ while current_time < max_time and end_idx < len(lib_ordered):
     index = lib_ordered[end_idx]
     current_time += lib_data[index][0][1]
 
-    nb_books_allowed = min(lib_data[index][0][0], max_time -
-                           current_time - int(lib_data[index][0][2]/lib_data[index][0][0]))
+    estimated_max_time = max_time - current_time - \
+        int(lib_data[index][0][2]/lib_data[index][0][0])
+    nb_books_allowed = min(lib_data[index][0][0], estimated_max_time)
 
     books_in_lib = lib_data[index][1]
+    books_to_scan = []
 
-    books_to_scan = [b for idx, b in enumerate(
-        books_in_lib) if (b not in books_already_scanned and idx < nb_books_allowed)]
-    books_already_scanned.extend(books_to_scan)
+    for book in books_in_lib:
+        if book not in books_already_scanned and nb_books_allowed > 0:
+            books_to_scan.append(book)
+            books_already_scanned.extend(books_to_scan)
+            nb_books_allowed -= 1
 
     libs_final.append({
         'id': index,
