@@ -10,7 +10,7 @@ with open(file_in+'.txt', 'r') as f:
     lines = f.readlines()
     book_nb, lib_nb, days = np.array([int(x) for x in lines[0].split()])
     scores = np.array([int(x) for x in lines[1].split()])
-    print(book_nb, lib_nb, days, scores)
+    #print(book_nb, lib_nb, days, scores)
 
     lib_data = []
     for l in range(2, len(lines), 2):
@@ -18,18 +18,22 @@ with open(file_in+'.txt', 'r') as f:
         ids = np.array([int(x) for x in lines[l+1].split()])
         lib_data.append([lib_para, ids])
    
-print(lib_data)
+#print(lib_data)
 print("START")
 
-lib_scores = np.array([])
+lib_scores = np.zeros(lib_nb)
 for k in range(int(lib_nb)):
     nb_books = lib_data[k][0][0] #books in lib k
     signup = lib_data[k][0][1] 
-    bookpday = lib_data[k][0][1]
-    print("score", scores)
-    print("books", lib_data[k][1])
+    bookpday = lib_data[k][0][2]
+    #print("books", lib_data[k][1])
     total_score = np.sum(scores[lib_data[k][1]])
-    print(total_score)
+    print(nb_books, signup, bookpday)
+    lib_score = total_score/nb_books*bookpday/signup
+    lib_scores[k] = lib_score
+print(lib_scores)
+
+
 
 ################### SOLVE ######################
 ###############################################
