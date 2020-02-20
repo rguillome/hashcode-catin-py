@@ -48,7 +48,9 @@ libs_final = []
 
 print("begin out")
 while current_time < max_time and end_idx < len(lib_ordered):
+
     index = lib_ordered[end_idx]
+    print("dealing lib ", index)
     current_time += lib_data[index][0][1]
 
     estimated_max_time = max_time - current_time - \
@@ -56,6 +58,8 @@ while current_time < max_time and end_idx < len(lib_ordered):
     nb_books_allowed = min(lib_data[index][0][0], estimated_max_time)
 
     books_in_lib = lib_data[index][1]
+
+    books_in_lib = sorted(books_in_lib, key=lambda elt: scores[elt])
     books_to_scan = []
 
     for book in books_in_lib:
@@ -63,6 +67,8 @@ while current_time < max_time and end_idx < len(lib_ordered):
             books_to_scan.append(book)
             books_already_scanned.extend(books_to_scan)
             nb_books_allowed -= 1
+        if nb_books_allowed <= 0:
+            break
 
     libs_final.append({
         'id': index,
