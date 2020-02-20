@@ -51,8 +51,10 @@ print("begin out")
 while current_time < max_time and end_idx < len(lib_ordered):
     index = lib_ordered[end_idx]
     current_time += lib_data[index][0][1]
-    nb_books_allowed = max(lib_data[index][0][0], max_time -
+
+    nb_books_allowed = min(lib_data[index][0][0], max_time -
                            current_time - int(lib_data[index][0][2]/lib_data[index][0][0]))
+
     books_in_lib = lib_data[index][1]
 
     books_to_scan = [b for idx, b in enumerate(
@@ -61,15 +63,15 @@ while current_time < max_time and end_idx < len(lib_ordered):
 
     libs_final.append({
         'id': index,
-        'nb_books': nb_books_allowed,
+        'nb_books': len(books_to_scan),
         'ids': [str(x) for x in books_to_scan]
     })
 
     end_idx += 1
 
 nb_lib = end_idx
-print(nb_lib)
-print(libs_final)
+# print(nb_lib)
+# print(libs_final)
 
 ################### WRITE ######################
 ###############################################
