@@ -76,14 +76,19 @@ nb_lib = end_idx
 ################### WRITE ######################
 ###############################################
 
-str_out = '{}\n'.format(nb_lib)
+
 list_section = ''
 
 for lib in libs_final:
     print(lib)
-    list_section += '{} {}\n'.format(lib["id"], lib["nb_books"])
-    list_section += ' '.join(lib["ids"])+'\n'
 
+    if lib["nb_books"] <= 0:
+        nb_lib -= 1
+    else:
+        list_section += '{} {}\n'.format(lib["id"], lib["nb_books"])
+        list_section += ' '.join(lib["ids"])+'\n'
+
+str_out = '{}\n'.format(nb_lib)
 str_out += list_section
 
 with open('{}_out.txt'.format(file_in), 'w') as file_out:
